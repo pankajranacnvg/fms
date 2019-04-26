@@ -55,7 +55,7 @@
                         <?php
                         //print_r($allbg);
                         ?>
-                        <table class="table table-hover">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Sr.</th>
@@ -65,6 +65,7 @@
                                     <th>Amount</th>
                                     <th>Create Date</th>
                                     <th>Expiry Date</th>
+                                    <th>Days to Expire</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -73,7 +74,7 @@
                                 foreach ($allbg as $value) {
                                     $time_period = $value['time_period'];
                                     ?>
-                                    <tr>
+                                    <tr onmouseover="highlight(this)" onmouseout="rem_highlight(this)" style="cursor: pointer">
                                         <td><?= $sr++ ?></td>
                                         <td><?= $value['clientname'] ?></td>
                                         <td><?= $value['project_title'] ?></td>
@@ -85,7 +86,16 @@
                                         </td>
                                         <td><?= $this->customlib->inr_format($value['amount']) ?></td>
                                         <td><?= date('d M, Y', strtotime($value['create_on'])); ?></td>
-                                        <td><?= date('d M, Y', strtotime('+' . $time_period . ' Month', strtotime($value['create_on']))); ?></td>
+                                        <td><?= $expireDate = date('d M, Y', strtotime('+' . $time_period . ' Month', strtotime($value['create_on']))); ?></td>
+                                        <td>
+                                            <?php
+                                            $now = time(); // or your date as well
+                                            $your_date = strtotime('+' . $time_period . ' Month', strtotime($value['create_on']));
+                                            $datediff = $your_date - $now;
+
+                                            echo round($datediff / (60 * 60 * 24));
+                                            ?>
+                                        </td>
                                     </tr>
                                     <?php
                                 }
@@ -98,7 +108,17 @@
         </div>
     </div><!--end col-->
 </div>
+<script>
+    function highlight(res) {
+        res.style.color = "#000";
+        res.style.backgroundColor = "#EEE";
+    }
 
+    function rem_highlight(res) {
+        res.style.color = "#777";
+        res.style.backgroundColor = "#FFF";
+    }
+</script>
 <!--end page content-->
 
 

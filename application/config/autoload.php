@@ -8,4 +8,4 @@ $autoload['drivers'] = array();
 $autoload['helper'] = array('url', 'captcha', 'form', 'string');
 $autoload['config'] = array();
 $autoload['language'] = array('system_lang');
-$autoload['model'] = array('Login_user', 'Userlog', 'Hierarchy', 'Project', 'Fund', 'Bg', 'Privilege');
+$autoload['model'] = array('Login_user', 'Userlog', 'Hierarchy', 'Project', 'Fund', 'Bg', 'Privilege', 'Bank');

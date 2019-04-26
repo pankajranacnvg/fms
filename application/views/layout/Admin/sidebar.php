@@ -91,7 +91,7 @@
                 if (array_search('Report', $module) !== FALSE) {
                     ?>
                     <li class="<?= $this->session->userdata('active') == 'Report' ? 'active' : '' ?>">
-                        <a href="<?= base_url('Admin/Report') ?>"><i class="icon-puzzle"></i> Report</a>
+                        <a href="<?= base_url('Admin/Report') ?>"><i class="icon-puzzle"></i> Reports</a>
                     </li>
                     <?php
                 }
@@ -101,7 +101,7 @@
                 if (array_search('Setting', $module) !== FALSE) {
                     ?>
                     <li class="<?= $this->session->userdata('active') == 'Setting' ? 'active' : '' ?>">
-                        <a href="<?= base_url('Admin/Setting') ?>"><i class="icon-settings"></i> Setting</a>
+                        <a href="<?= base_url('Admin/Setting') ?>"><i class="icon-settings"></i> Settings</a>
                     </li>
                     <?php
                 }

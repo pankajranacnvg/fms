@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-$config['base_url'] = 'http://localhost:8888/FMS/';
+$config['base_url'] = 'http://localhost:8888/fms/';
 $config['index_page'] = 'index.php';
 $config['uri_protocol'] = 'REQUEST_URI';
 $config['url_suffix'] = '';

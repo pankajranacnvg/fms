@@ -94,5 +94,74 @@ $config = array(
             'label' => 'Valid From',
             'rules' => 'trim|required'
         )
+    ),
+    'add_bank' => array(
+        array(
+            'field' => 'bank_name',
+            'label' => 'Bank Name',
+            'rules' => 'trim|required|min_length[3]|is_unique[bank_account.bank_name]'
+        ),
+        array(
+            'field' => 'branch_address',
+            'label' => 'Branch Address',
+            'rules' => 'trim|required|min_length[3]'
+        ),
+        array(
+            'field' => 'account_number',
+            'label' => 'Account Number',
+            'rules' => 'trim|required|numeric|min_length[3]'
+        ),
+        array(
+            'field' => 'ifsc_account',
+            'label' => 'IFSC Code',
+            'rules' => 'trim|required|min_length[3]'
+        ),
+        array(
+            'field' => 'avail_amount',
+            'label' => 'Amount',
+            'rules' => 'trim|required|numeric'
+        ),
+        array(
+            'field' => 'status',
+            'label' => 'Status',
+            'rules' => 'trim|required'
+        ),
+        array(
+            'field' => 'create_on',
+            'label' => 'Create Date',
+            'rules' => 'trim|required'
+        )
+    ),
+    'update_bank' => array(
+        array(
+            'field' => 'branch_address',
+            'label' => 'Branch Address',
+            'rules' => 'trim|required|min_length[3]'
+        ),
+        array(
+            'field' => 'account_number',
+            'label' => 'Account Number',
+            'rules' => 'trim|required|numeric|min_length[3]'
+        ),
+        array(
+            'field' => 'ifsc_account',
+            'label' => 'IFSC Code',
+            'rules' => 'trim|required|min_length[3]'
+        ),
+        array(
+            'field' => 'avail_amount',
+            'label' => 'Amount',
+            'rules' => 'trim|required|numeric'
+        ),
+        array(
+            'field' => 'status',
+            'label' => 'Status',
+            'rules' => 'trim|required'
+        ),
+        array(
+            'field' => 'create_on',
+            'label' => 'Create Date',
+            'rules' => 'trim|required'
+        )
     )
 );
