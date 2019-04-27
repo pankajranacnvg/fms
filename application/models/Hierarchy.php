@@ -104,4 +104,27 @@ class Hierarchy extends CI_Model {
         $this->db->update($this->table_name, $data_detail);
     }
 
+    public function addLoginDetails($data) {
+        if ($this->ifLoginExist($data['hierarchy_id'])) {
+            $this->db->where('hierarchy_id', $hirearchy_id);
+            $this->db->update('login_user', $data);
+        } else {
+            $this->db->insert('login_user', $data);
+        }
+    }
+
+    public function ifLoginExist($hirearchy_id) {
+        $this->db->select('count(*) as num');
+        $this->db->from('login_user');
+        $this->db->where(array('hierarchy_id' => $hirearchy_id));
+
+        $result = $this->db->get();
+        $data = $result->row_array();
+        if ($data['num'] > 0) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+
 }

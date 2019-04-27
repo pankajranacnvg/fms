@@ -119,41 +119,15 @@ class Welcome extends CI_Controller {
             $this->Login_user->organisation_registration($data);
 
             //send email start
-            $subject = 'CNVG Fund Management - Email Verification';
+            $subject = $this->lang->line('project_name').' - Email Verification';
             $message = '<h3>Welcome to CNVG Fund Management System</h3>';
             $message .= "<h4>Click on the link below to verify your Email Id</h3>";
             $message .= "<p>Verification Link : <a href='" . base_url('welcome/verify_email') . "/" . $ciphertext . "'>Click Here</a></p>";
 
-// Get full html:
-            $body = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=' . strtolower(config_item('charset')) . '" />
-    <title>' . html_escape($subject) . '</title>
-    <style type="text/css">
-        body {
-            font-family: Arial, Verdana, Helvetica, sans-serif;
-            font-size: 18px;
-        }
-    </style>
-</head>
-<body>
-' . $message . '
-</body>
-</html>';
-// Also, for getting full html you may use the following internal method:
-//$body = $this->email->full_html($subject, $message);
+            // Get full html:
+            $body = $this->customlib->mail_body($message);
+            $this->customlib->send_mail($head_email, $subject, $body);
 
-            $result = $this->email
-                    ->from('admin@cnvg.in', 'CNVG Fund Management')
-                    ->to($head_email)
-                    ->subject($subject)
-                    ->message($body)
-                    ->send();
-
-            //var_dump($result);
-            //echo '<br />';
-            //echo $this->email->print_debugger();
             //send mail ends
             $this->session->set_flashdata('msg', 'Verification link has been sent to your registered email id : ' . $head_email);
             redirect(base_url('welcome/setup'));
@@ -179,36 +153,16 @@ class Welcome extends CI_Controller {
             $head_email = $response['head_email'];
             $username = $response['username'];
 
-            $subject = 'CNVG Fund Management - Registration Success';
+            $subject = $this->lang->line('project_name').' - Registration Success';
             $message = '<h3>Welcome to CNVG Fund Management System</h3>';
             $message .= "<h4>Login Credential</h3>";
             $message .= "<p>Link : " . base_url() . "</p>";
             $message .= "<p>Username : $username</p>";
             $message .= "<p>Password : $password</p>";
 
-// Get full html:
-            $body = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=' . strtolower(config_item('charset')) . '" />
-    <title>' . html_escape($subject) . '</title>
-    <style type="text/css">
-        body {
-            font-family: Arial, Verdana, Helvetica, sans-serif;
-            font-size: 18px;
-        }
-    </style>
-</head>
-<body>
-' . $message . '
-</body>
-</html>';
-            $result = $this->email
-                    ->from('admin@cnvg.in', 'CNVG Fund Management')
-                    ->to($head_email)
-                    ->subject($subject)
-                    ->message($body)
-                    ->send();
+            // Get full html:
+            $body = $this->customlib->mail_body($message);
+            $this->customlib->send_mail($head_email, $subject, $body);
 
             $data['message'] = "<div class='lastend-container'> <h2>Email Verification</h2> <div class='error_msg'> Your email id has been successfully verified </div> </div>";
 

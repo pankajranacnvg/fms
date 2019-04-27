@@ -11,6 +11,7 @@ class Customlib {
         $this->CI = & get_instance();
         $this->CI->load->library('session');
         $this->CI->load->library('user_agent');
+        $this->CI->load->library('email');
     }
 
     public function setUserLog($login_id, $username, $role) {
@@ -86,11 +87,11 @@ class Customlib {
     public function userdetail() {
         return $this->CI->session->userdata('login_detail');
     }
-    
-    public function getLable(){
+
+    public function getLable() {
         $response = [];
         $lable_arr = $this->CI->Login_user->labeling();
-        foreach ($lable_arr as $data){
+        foreach ($lable_arr as $data) {
             $key = $data['default_lable'];
             $response[$key] = $data['new_lable'];
         }
@@ -99,23 +100,52 @@ class Customlib {
 
     public function inr_format($figure) {
         if ($figure > 99000 && $figure <= 9900000) {
-            $figure = (float)($figure / 100000);
+            $figure = (float) ($figure / 100000);
             return number_format(round($figure, 2), 2) . " Lakh";
         } elseif ($figure > 9900000) {
-            $figure = (float)($figure / 10000000);
+            $figure = (float) ($figure / 10000000);
             return number_format(round($figure, 2), 2) . " Cr";
         } else {
             return number_format(round($figure, 2), 2);
         }
     }
-    
-    public function getPrivilege(){
+
+    public function getPrivilege() {
         $user = $this->userdetail();
         $username = $user['username'];
         $privilege = $this->CI->Privilege->get_privilege($username);
         $module = array_column($privilege, 'module');
         return($module);
-        
+    }
+
+    public function mail_body($content) {
+        $body = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=' . strtolower(config_item('charset')) . '" />
+    <title>' . html_escape($subject) . '</title>
+    <style type="text/css">
+        body {
+            font-family: Arial, Verdana, Helvetica, sans-serif;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+' . $content . '
+</body>
+</html>';
+
+        return $body;
+    }
+
+    public function send_mail($to, $subject, $body) {
+        $this->CI->email
+                ->from('admin@cnvg.in', 'CNVG Fund Management')
+                ->to($to)
+                ->subject($subject)
+                ->message($body)
+                ->send();
     }
 
 }
