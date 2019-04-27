@@ -65,14 +65,96 @@ class ManageFund extends CI_Controller {
         $data['login_info'] = $login_info;
         $data['topbar'] = "Manage Fund";
 
-        $hierarchy = $this->Hierarchy->getHierarchy();
+        $hierarchy = $this->Hierarchy->getHierarchy($data['curr_proj_id']);
         $data['hierarchy'] = $hierarchy;
+        $latest_hierarchy_amt = $this->Fund->getlastupdatedfund($data['curr_proj_id']);
+        $data['latest_hierarchy_amt'] = $latest_hierarchy_amt;
+        
 
         $this->load->view('layout/Admin/header', $data);
         $this->load->view('layout/Admin/sidebar', $data);
         $this->load->view('Admin/fund_assign', $data);
         $this->load->view('layout/Admin/footer', $data);
     }
+
+
+
+
+    public function assign_fund(){
+        $this->form_validation->set_rules('project_id', 'Project Name', 'required');
+        $this->form_validation->set_rules('amount[]', 'Enter Amount', 'required|numeric');
+        
+        if ($this->form_validation->run() == FALSE) {
+          
+            $main_menu['active'] = 'ManageFund';
+            $this->session->set_userdata($main_menu);
+
+            $project_list = $this->Project->project_fund();
+            $data['project_list'] = $project_list;
+            //echo "<pre>";
+            //print_r($project_list);
+            //echo "</pre>";
+            //die;
+            if ($proj_id != '') {
+                $data['curr_proj_id'] = $proj_id;
+            } else {
+                $data['curr_proj_id'] = $project_list[0]['id'];
+            }
+
+            $data['controller'] = $this;
+            $login_info = $this->customlib->userdetail();
+
+            $data['login_info'] = $login_info;
+            $data['topbar'] = "Manage Fund";
+
+            $hierarchy = $this->Hierarchy->getHierarchy();
+            $data['hierarchy'] = $hierarchy;
+
+            $this->load->view('layout/Admin/header', $data);
+            $this->load->view('layout/Admin/sidebar', $data);
+            $this->load->view('Admin/fund_assign', $data);
+            $this->load->view('layout/Admin/footer', $data);
+        }else{
+            $project_id = $this->input->post('project_id');
+            $amount = $this->input->post('amount');
+            $hierarchy_id = $this->input->post('hierarchy_id');
+
+
+            if(!empty($hierarchy_id)){
+
+                 
+                  $i=0;
+                  foreach ($hierarchy_id as $s_name) {
+                      $sizedata_i[]= array(
+                          'project_id'=>$project_id,
+                          'amount'=>$amount[$i],
+                          'hierarchy_id'=>$s_name,
+                          'create_on'=>date('Y-m-d h:i:s')
+                        );
+                      $i++;
+                     
+                  }
+
+                 if ($this->Fund->add_batch($sizedata_i)) {
+                    $this->session->set_flashdata('msg', "<span class='text-success'>Amount is Added Sucessfully</span>");
+                } else {
+                    $this->session->set_flashdata('msg', "<span class='text-danger'>Amount Adding Failed</span>");
+                } 
+
+
+            }
+
+            
+            
+
+            redirect(base_url('Admin/ManageFund/assign/'));
+        }
+    }
+
+
+
+
+
 
     /* public function assign($hierarchy_id) {
       $main_menu['active'] = 'ManageFund';

@@ -52,7 +52,7 @@ class Hierarchy extends CI_Model {
         return $query->result_array();
     }
 
-    public function getHierarchy() {
+    public function getHierarchy($projectid) {
         $query = "SELECT
             root.id AS root_id,
             down1.id as lable_1_id,
@@ -65,7 +65,8 @@ class Hierarchy extends CI_Model {
             down2.lable AS lable_2,
             down3.lable AS lable_3,
             down4.lable AS lable_4,
-            down5.lable AS lable_5
+            down5.lable AS lable_5,
+            t2.Label_Fund_Allotted
         FROM
             $this->table_name root
             LEFT JOIN $this->table_name down1 ON down1.parent_id = root.id
@@ -73,8 +74,10 @@ class Hierarchy extends CI_Model {
             LEFT JOIN $this->table_name down3 ON down3.parent_id = down2.id
             LEFT JOIN $this->table_name down4 ON down4.parent_id = down3.id
             LEFT JOIN $this->table_name down5 ON down5.parent_id = down4.id
+            INNER JOIN(SELECT hierarchy_id, SUM(amount) AS Label_Fund_Allotted FROM fund where project_id='".$projectid."' GROUP BY hierarchy_id) t2 ON down2.id = t2.hierarchy_id
         WHERE
             ISNULL(root.parent_id)";
+           
 
         $result = $this->db->query($query);
         //echo $this->db->last_query(); die;
@@ -102,6 +105,29 @@ class Hierarchy extends CI_Model {
         //print_r($data_detail); die;
         $this->db->where('id', $hirearchy_id);
         $this->db->update($this->table_name, $data_detail);
+    }
+
+    public function addLoginDetails($data) {
+        if ($this->ifLoginExist($data['hierarchy_id'])) {
+            $this->db->where('hierarchy_id', $hirearchy_id);
+            $this->db->update('login_user', $data);
+        } else {
+            $this->db->insert('login_user', $data);
+        }
+    }
+
+    public function ifLoginExist($hirearchy_id) {
+        $this->db->select('count(*) as num');
+        $this->db->from('login_user');
+        $this->db->where(array('hierarchy_id' => $hirearchy_id));
+
+        $result = $this->db->get();
+        $data = $result->row_array();
+        if ($data['num'] > 0) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
     }
 
 }

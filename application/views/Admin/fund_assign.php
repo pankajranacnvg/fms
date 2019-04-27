@@ -10,7 +10,9 @@
                 </div>
                 <br>
             </div>
+
             <div class="panel-body">
+                <form action="<?= base_url('Admin/ManageFund/assign_fund') ?>" method="post">
                 <div class="row">
                     <div class="col-lg-4">
                         <?php
@@ -19,7 +21,7 @@
                         //echo "<pre>"; print_r($project_list); echo "</pre>"; 
                         ?>
                         <label>Allotment for the project</label>
-                        <select class="form-control" onchange="changeUrl(this.value)">
+                        <select class="form-control" name="project_id" onchange="changeUrl(this.value)">
                             <?php
                             foreach ($project_list as $data) {
                                 ?> <option <?= ($curr_proj_id == $data['id'] ? 'selected' : '') ?> value="<?= $data['id'] ?>"><?= $data['project_title'] ?></option> <?php
@@ -33,7 +35,7 @@
                                 <td style="width: 150px; background-color: #607d8b; color: #fff">Available Fund</td>
                                 <td style="color: #000" id="totfund_<?=$sr?>"><?= $this->customlib->inr_format($project_list[$currIndex]['Total_Fund_Allotted']) ?></td>
                                 <td style="width: 150px; background-color: #607d8b; color: #fff">Allotted Fund</td>
-                                <td style="color: #000" id="allotted_<?=$sr?>"><?= $this->customlib->inr_format($project_list[$currIndex]['Total_Fund_Allotted']) ?></td>
+                                <td style="color: #000" id="allotted_<?=$sr?>"><?= $this->customlib->inr_format($project_list[$currIndex]['Fund_Allotted']) ?></td>
                             </tr>
                             <tr>
                                 <td style="width: 150px; background-color: #607d8b; color: #fff">Project Type</td>
@@ -43,6 +45,9 @@
                     </div>
                 </div>
                 <hr>
+
+                <?php echo $this->session->flashdata('msg');?>
+
                 <div class="row">
                     <div class="col-lg-12">
                         <table class="table table-bordered fms-table">
@@ -63,6 +68,9 @@
                                 $lable_1 = "";
                                 $lable_2 = "";
                                 foreach ($hierarchy as $data) {
+                                    
+                                    $lable_2_id = $data['lable_2_id'];
+                                    
                                     if ($rootname != $data['root_name']) {
                                         $rootname = $data['root_name'];
                                         $root_txt = $rootname;
@@ -77,6 +85,10 @@
                                         $lab2_txt = $lable_2;
                                     }
                                     ?>
+                                    <?php
+                                        if ($lab2_txt != '') {
+                                    ?>
+                                    
                                     <tr>
                                         <td>
                                             <?php
@@ -92,12 +104,15 @@
                                             }
                                             ?>
                                         </td>
-                                        <td id="assign_<?=$sr?>" class="text-right"><?= $this->customlib->inr_format(0) ?></td>
+                                        <td id="assign_<?=$sr?>" class="text-right"><?= $this->customlib->inr_format($data['Label_Fund_Allotted']) ?></td>
                                         <td id="available_<?=$sr?>" class="text-right"><?= $this->customlib->inr_format(0) ?></td>
-                                        <td class="text-right"><?= $this->customlib->inr_format(0) ?></td>
-                                        <td><input  id="newallot_<?=$sr?>" type="text" name="" class="form-control"></td>
+                                        <td class="text-right"><?= $this->customlib->inr_format($latest_hierarchy_amt[$lable_2_id]) ?></td>
+                                        <td>
+                                            <input type="hidden" value="<?php echo $lable_2_id;?>" name="hierarchy_id[]">
+                                            <input  id="newallot_<?=$sr?>" required type="text" name="amount[]" class="form-control" autocomplete="off" value="0"  onkeypress="return isNumber(event)"></td>
                                     </tr>
                                     <?php
+                                        }
                                     $root_txt = '';
                                     $lab1_txt = '';
                                     $lab2_txt = '';
@@ -108,13 +123,15 @@
                                 <tr>
                                     <td colspan="5" class="text-right"></td>
                                     <td>
-                                        <button class="btn btn-block btn-primary">Update Allottment</button>
+                                        <button type="submit" class="btn btn-block btn-primary">Update Allottment</button>
                                     </td>
                                 </tr>
+                                
                             </tbody>
                         </table>
                     </div>
                 </div>
+                </form>
             </div>
         </div>
     </div><!--end col-->

@@ -47,10 +47,10 @@ class Project extends CI_Model {
 
     public function project_fund($proj_id = '') {
         if ($proj_id == ''):
-            $query = $this->db->query("SELECT t1.id, t1.project_title, t1.project_description, t1.project_type, t1.created_by, t2.Total_Fund_Allotted, t1.create_on FROM project t1 INNER JOIN(SELECT proj_id, SUM(fund_allotted) AS Total_Fund_Allotted FROM fund_allotment GROUP BY proj_id) t2 ON t1.id = t2.proj_id");
+            $query = $this->db->query("SELECT t1.id, t1.project_title, t1.project_description, t1.project_type, t1.created_by, t2.Total_Fund_Allotted, t3.Fund_Allotted, t1.create_on FROM project t1 INNER JOIN(SELECT proj_id, SUM(fund_allotted) AS Total_Fund_Allotted FROM fund_allotment GROUP BY proj_id) t2 ON t1.id = t2.proj_id INNER JOIN(SELECT project_id, SUM(amount) AS Fund_Allotted FROM fund GROUP BY project_id) t3 ON t1.id = t3.project_id");
             return $query->result_array();
         else:
-            $query = $this->db->query("SELECT t1.id, t1.project_title, t1.project_description, t1.project_type, t1.created_by, t2.Total_Fund_Allotted, t1.create_on FROM project t1 INNER JOIN(SELECT proj_id, SUM(fund_allotted) AS Total_Fund_Allotted FROM fund_allotment GROUP BY proj_id) t2 ON t1.id = t2.proj_id WHERE t1.id = " . $proj_id);
+            $query = $this->db->query("SELECT t1.id, t1.project_title, t1.project_description, t1.project_type, t1.created_by, t2.Total_Fund_Allotted, t3.Fund_Allotted, t1.create_on FROM project t1 INNER JOIN(SELECT proj_id, SUM(fund_allotted) AS Total_Fund_Allotted FROM fund_allotment GROUP BY proj_id) t2 ON t1.id = t2.proj_id INNER JOIN(SELECT project_id, SUM(amount) AS Fund_Allotted FROM fund GROUP BY project_id) t3 ON t1.id = t3.project_id WHERE t1.id = " . $proj_id);
             return $query->row_array();
         endif;
     }

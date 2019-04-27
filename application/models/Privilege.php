@@ -2,7 +2,7 @@
 
 class Privilege extends CI_Model{
     
-    private $table_name = 'Privilege';
+    private $table_name = 'privilege';
     public function __construct() {
         parent::__construct();
     }

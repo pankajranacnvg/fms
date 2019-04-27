@@ -12,6 +12,20 @@ class Fund extends CI_Model {
         return $this->db->insert($this->table_name, $data);
     }
 
+    public function add_batch($data) {
+        return $this->db->insert_batch('fund', $data);
+    }
+
+    public function getlastupdatedfund($pro_id){
+        $query = $this->db->query("select l.* from fund l inner join ( select hierarchy_id, amount, max(id) as latest from fund where project_id='".$pro_id."' group by hierarchy_id) r on l.id = r.latest and l.hierarchy_id = r.hierarchy_id order by id desc");
+        $data = $query->result_array();
+        foreach ($data as $value) {
+            $hierarchy_id=$value['hierarchy_id'];
+            $temp[$hierarchy_id] = $value['amount'];
+        }
+        return $temp;
+    }
+
     /* show inserted datas */
 
     public function get($hierarchy_id = null) {

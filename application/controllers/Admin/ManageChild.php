@@ -5,14 +5,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class ManageChild extends CI_Controller {
 
     private $username;
-
+    private $login_Detail;
     public function __construct() {
         parent::__construct();
-
+        
         if (empty($this->session->userdata('login_detail'))) {
             redirect(base_url());
         }
-
+        
+        $this->login_Detail = $this->session->userdata('login_detail');
+        
         $this->username = $this->session->userdata('username');
     }
 
@@ -96,10 +98,40 @@ class ManageChild extends CI_Controller {
             $post_data['bank_branch'] = $this->input->post('bank_branch');
             $post_data['account_number'] = $this->input->post('account_number');
             $post_data['ifsc_code'] = $this->input->post('ifsc_code');
-            
+
             //print_r($post_data); die;
-            
+
             $this->Hierarchy->addDetails($post_data, $hierarchy_id);
+            
+            $password = strtolower(random_string('alpha', '6'));
+            
+            $log_data['hierarchy_id'] = $hierarchy_id;
+            $log_data['organisation_name'] = $this->login_Detail['organisation_name'];
+            $log_data['head_name'] = $post_data['head_name'];
+            $log_data['head_email'] = $post_data['head_email'];
+            $log_data['head_mobile'] = $post_data['head_contact'];
+            $log_data['username'] = $post_data['head_email'];
+            $log_data['password'] = md5($password);
+            $log_data['login_type'] = 'CHILD';
+            $log_data['email_verify'] = 1;
+            $log_data['create_on'] = date('Y-m-d H:i:s');
+            
+            $this->Hierarchy->addLoginDetails($log_data);
+            
+            //send email start
+            $head_email = $post_data['head_email'];
+            $username = $post_data['head_email'];
+                    
+            $subject = $this->lang->line('project_name') . ' - Registration Success';
+            $message = '<h3>Welcome to CNVG Fund Management System</h3>';
+            $message .= "<h4>Login Credential</h3>";
+            $message .= "<p>Link : " . base_url() . "</p>";
+            $message .= "<p>Username : $username</p>";
+            $message .= "<p>Password : $password</p>";
+
+            $body = $this->customlib->mail_body($message);
+            $this->customlib->send_mail($head_email, $subject, $body);
+            
             $this->session->set_flashdata('msg', "KYC Updated Sucessfully");
             redirect(base_url('Admin/ManageChild/KYC/' . $hierarchy_id));
         }
