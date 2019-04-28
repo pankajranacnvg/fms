@@ -21,6 +21,10 @@ class Login_user extends CI_Model {
             return 0;
         endif;
     }
+    
+    public function add($data){
+        return $this->db->insert($this->table_name, $data);
+    }
 
     public function organisation_registration($data) {
         $temp['lable'] = $data['organisation_name'];

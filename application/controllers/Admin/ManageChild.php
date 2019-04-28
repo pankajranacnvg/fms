@@ -14,7 +14,6 @@ class ManageChild extends CI_Controller {
         }
         
         $this->login_Detail = $this->session->userdata('login_detail');
-        
         $this->username = $this->session->userdata('username');
     }
 

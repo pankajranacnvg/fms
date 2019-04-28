@@ -48,12 +48,15 @@ class Welcome extends CI_Controller {
                         switch ($response['login_type']) {
                             case 'ADMIN':
                                 $session['login_detail'] = $response;
-                                
                                 $this->customlib->setUserLog($response['id'], $response['username'], $response['login_type']);
                                 $this->session->set_userdata($session);
                                 redirect(base_url('Admin/Dashboard'));
                                 break;
-                            case 'OTHER':
+                            case 'CHILD':
+                                $session['login_detail'] = $response;
+                                $this->customlib->setUserLog($response['id'], $response['username'], $response['login_type']);
+                                $this->session->set_userdata($session);
+                                redirect(base_url('Child/Dashboard'));
                                 break;
                             default :
                                 $this->session->set_flashdata("msg", "<p class='text-danger'>Either Username or Password Mismatched !</p>");

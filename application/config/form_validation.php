@@ -163,5 +163,37 @@ $config = array(
             'label' => 'Create Date',
             'rules' => 'trim|required'
         )
+    ),
+    'add_supervisor' => array(
+        array(
+            'field' => 'name',
+            'label' => 'Name',
+            'rules' => 'trim|required|alpha_numeric_spaces'
+        ),
+        array(
+            'field' => 'designation',
+            'label' => 'Designation',
+            'rules' => 'trim|required'
+        ),
+        array(
+            'field' => 'email',
+            'label' => 'Email Id',
+            'rules' => 'trim|required|valid_email|is_unique[login_user.head_email]'
+        ),
+        array(
+            'field' => 'mobile',
+            'label' => 'Mobile Number',
+            'rules' => 'trim|required'
+        ),
+        array(
+            'field' => 'age',
+            'label' => 'Age',
+            'rules' => 'trim|required|integer'
+        ),
+        array(
+            'field' => 'gender',
+            'label' => 'Gender',
+            'rules' => 'trim|required'
+        )
     )
 );

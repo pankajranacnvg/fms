@@ -108,7 +108,7 @@
                 ?>
 
 
-                <li>
+                <li style="margin-top: 10px;">
                     <a href="<?= base_url('Setting/logout')?>" class="bg-danger">
                         <i class="icon-logout"></i>Logout
                     </a>

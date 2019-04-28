@@ -7,6 +7,6 @@ class Userlog extends CI_Model{
     }
     
     public function add($data){
-        $this->db->insert($this->table_name, $data);
+        return $this->db->insert($this->table_name, $data);
     }
 }

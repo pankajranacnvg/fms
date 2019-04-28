@@ -21,10 +21,10 @@ class Dashboard extends CI_Controller {
         $data['login_info'] = $login_info;
         $data['topbar'] = "Dashboard";
 
-        $this->load->view('layout/Admin/header', $data);
-        $this->load->view('layout/Admin/sidebar', $data);
-        $this->load->view('Admin/dashboard_index', $data);
-        $this->load->view('layout/Admin/footer', $data);
+        $this->load->view('layout/Child/header', $data);
+        $this->load->view('layout/Child/sidebar', $data);
+        $this->load->view('Child/dashboard_index', $data);
+        $this->load->view('layout/Child/footer', $data);
     }
 
 }
